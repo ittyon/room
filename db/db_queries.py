@@ -90,7 +90,7 @@ def get_hold_stock_by_user(user_id):
         try:
             cursor = conn.cursor()
 
-            query = "select st.stock_code, company_name, round(CAST(AVG(st.unit_price) AS numeric),1), sum(case when transaction_type = 'buy' then quantity end) - sum(case when transaction_type = 'sell' then quantity else 0 end) as hold_quantity, sector_name from stock_transactions st join stock s on st.stock_code = s.stock_code where user_id = %s group by st.stock_code, company_name, sector_name;"
+            query = "select st.stock_code, company_name, round(CAST(sum(st.unit_price * st.quantity)/sum(quantity)) AS numeric),0), sum(case when transaction_type = 'buy' then quantity end) - sum(case when transaction_type = 'sell' then quantity else 0 end) as hold_quantity, sector_name from stock_transactions st join stock s on st.stock_code = s.stock_code where user_id = %s group by st.stock_code, company_name, sector_name;"
             
             cursor.execute(query, (user_id,))
             results = cursor.fetchall()
