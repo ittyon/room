@@ -182,7 +182,7 @@ def get_users():
         try:
             cursor = conn.cursor()
 
-            query = "select username, nickname, password, email, id from users;"
+            query = "select username, nickname, password, email, id from users order by id;"
             
             cursor.execute(query)
             results = cursor.fetchall()
